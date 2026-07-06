@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audio Emotion Client Demo</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Demo local</p>
+          <h1>Audio Emotion Client Demo</h1>
+          <p class="subtitle">Demonstração de consumo da Audio Emotion API por outro app.</p>
+        </div>
+        <div class="status-panel" aria-live="polite">
+          <div><span>App</span><strong id="app-status">Carregando...</strong></div>
+          <div><span>Audio Emotion API</span><strong id="api-status">Carregando...</strong></div>
+          <div><span>LLM</span><strong id="llm-status">Carregando...</strong></div>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Enviar áudio</h2>
+        <form id="analyze-form">
+          <label class="field">
+            <span>Arquivo de áudio</span>
+            <input id="audio-file" name="file" type="file" accept=".mp3,.wav,.m4a,.webm,.ogg,audio/*" />
+            <small id="selected-file">Nenhum arquivo selecionado.</small>
+          </label>
+
+          <div class="recorder">
+            <div class="recorder-info">
+              <strong>Gravação pelo navegador</strong>
+              <small id="recording-status">Disponível se o navegador permitir microfone.</small>
+              <small class="recording-tip">
+                Para melhor transcrição, fale perto do microfone, evite ruído e não deixe o áudio estourar.
+              </small>
+              <div class="recording-meter">
+                <span id="recording-timer">00:00</span>
+                <span id="recording-mime">MIME ainda não definido</span>
+              </div>
+              <dl id="recording-details" class="recording-details" hidden>
+                <div>
+                  <dt>Arquivo</dt>
+                  <dd id="recorded-file-name">Não informado</dd>
+                </div>
+                <div>
+                  <dt>Tipo MIME</dt>
+                  <dd id="recorded-file-type">Não informado</dd>
+                </div>
+                <div>
+                  <dt>Tamanho</dt>
+                  <dd id="recorded-file-size">Não informado</dd>
+                </div>
+                <div>
+                  <dt>Duração aprox.</dt>
+                  <dd id="recorded-file-duration">Não informado</dd>
+                </div>
+              </dl>
+              <audio id="recorded-audio-player" controls hidden></audio>
+              <a id="download-recording" class="download-link" href="#" download hidden>
+                Baixar áudio gravado
+              </a>
+            </div>
+            <div class="actions">
+              <button type="button" id="start-recording">Gravar</button>
+              <button type="button" id="stop-recording" disabled>Parar</button>
+              <button type="button" id="clear-recording" disabled>Limpar</button>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>Perfil do assistente</span>
+            <select id="assistant-profile" name="assistant_profile">
+              <option value="support">Suporte técnico</option>
+              <option value="customer_service">Atendimento ao cliente</option>
+              <option value="teacher">Professor</option>
+              <option value="empathetic">Assistente empático</option>
+              <option value="free">Livre</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Instrução extra para a LLM</span>
+            <textarea
+              id="user-instruction"
+              name="user_instruction"
+              rows="4"
+              placeholder="Exemplo: responda como se fosse um suporte de produto SaaS."
+            ></textarea>
+          </label>
+
+          <button class="primary" id="submit-button" type="submit">Analisar áudio e gerar resposta</button>
+          <p id="loading" class="loading" hidden>Enviando áudio e aguardando análise...</p>
+          <p id="error-message" class="error" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <section id="results" class="results" hidden>
+        <article class="card">
+          <h2>Resultado da Audio Emotion API</h2>
+          <div id="emotion-summary" class="summary-grid"></div>
+          <div class="block">
+            <h3>Transcrição</h3>
+            <p id="transcription"></p>
+          </div>
+          <div class="block">
+            <h3>Transcrição comentada</h3>
+            <p id="annotated-transcription"></p>
+          </div>
+          <div class="block">
+            <h3>Contexto recomendado para IA</h3>
+            <p id="recommended-context"></p>
+          </div>
+          <div class="block">
+            <h3>Observações importantes</h3>
+            <ul id="important-observations"></ul>
+          </div>
+          <details id="raw-json-wrapper">
+            <summary>JSON bruto</summary>
+            <pre id="raw-json"></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h2>Prompt enviado para a LLM</h2>
+          <details open>
+            <summary>Ver prompt completo</summary>
+            <pre id="llm-prompt"></pre>
+          </details>
+        </article>
+
+        <article class="card">
+          <h2>Resposta da LLM</h2>
+          <p><strong>Status:</strong> <span id="final-llm-status"></span></p>
+          <div class="response" id="llm-response"></div>
+          <div id="warnings-wrapper" class="warnings" hidden>
+            <h3>Warnings</h3>
+            <ul id="warnings"></ul>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
