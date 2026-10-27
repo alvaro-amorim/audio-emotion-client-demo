@@ -1,5 +1,11 @@
 # Audio Emotion Client Demo
 
+## Avaliação do ecossistema
+
+Este repositório demonstra integração e consumo de API. O processamento de áudio e suas regras pertencem à [Emotion API](https://github.com/alvaro-amorim/emotion-api); os dois repositórios formam um único case.
+
+Avalie configuração da API de destino, tratamento de erro e montagem do contexto para resposta. A resposta de uma LLM externa depende de configuração e quota próprias; as seções de fallback e testes descrevem o comportamento local.
+
 App local de demonstração que consome a **[Audio Emotion API](https://github.com/alvaro-amorim/emotion-api)**, transforma áudio em contexto emocional estruturado e usa esse contexto para gerar uma resposta com LLM.
 
 > Este projeto é um cliente demonstrativo. Ele não transcreve, não calcula emoção e não processa áudio localmente. Toda a análise de áudio acontece na Audio Emotion API principal.
